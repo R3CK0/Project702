@@ -13,6 +13,7 @@ def main():
     grid_size = 30
     game_engine = ge.GameEngine(window_width, window_height, grid_size)
     game_engine.draw_grid()
+    game_engine.create_boundary()
     start_pos = None
     end_pos = None
 
