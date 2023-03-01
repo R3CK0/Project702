@@ -3,17 +3,20 @@
 
 from queue import PriorityQueue
 from node import Node
+import pygame
+import time
 
 # Description: A* pathfinding algorithm
 class AStar:
-    def __init__(self, width, height, grid_size, obstacles):
+    def __init__(self, width, height, grid_size, obstacles, window):
         self.width = width
         self.height = height
         self.grid_size = grid_size
         self.obstacles = obstacles
+        self.window = window
 
     # Find a path from start to end
-    def find_path(self, start_pos, end_pos):
+    def find_path(self, start_pos, end_pos, progress=False):
         # Create the open and closed sets
         open_set = PriorityQueue()
         closed_set = set()
@@ -31,6 +34,7 @@ class AStar:
             current_node = open_set.get()[1]
             closed_set.add(current_node)
 
+
             # If the current node is the end node, return the path
             if current_node == end_node:
                 return self.reconstruct_path(current_node)
@@ -42,6 +46,11 @@ class AStar:
             for neighbour in neighbours:
                 # Create a neighbour node
                 neighbour_node = Node(current_node, neighbour)
+                if progress:
+                    pygame.draw.line(self.window, (148, 0, 211), (current_node.pos[0] + self.grid_size/2, current_node.pos[1] + self.grid_size/2)
+                                    , (neighbour_node.pos[0] + self.grid_size/2, neighbour_node.pos[1] + self.grid_size/2), 2)
+                    pygame.display.update()
+                    time.sleep(0.01)
 
                 # If the neighbour is in the closed set, continue
                 if neighbour_node in closed_set:
@@ -66,7 +75,7 @@ class AStar:
                                 break
 
         # Return an empty path if no path was found
-        return []
+        return None
 
     def isInQueue(self, node, open_set):
         for item in open_set.queue:

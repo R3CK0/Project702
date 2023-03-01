@@ -32,8 +32,8 @@ class GameEngine:
     def add_obstacle(self, x, y):
         x = x - (x % self.grid_size)
         y = y - (y % self.grid_size)
-        pygame.draw.rect(self.window, (255, 0, 0), pygame.Rect(x, y, self.grid_size, self.grid_size))
-        obstacle = Obstacle(x, y, self.grid_size)
+        obstacle = pygame.Rect(x, y, self.grid_size, self.grid_size)
+        pygame.draw.rect(self.window, (255, 0, 0), obstacle)
         if (x, y) not in self.obstacles:
             self.obstacles[(x, y)] = obstacle
 
@@ -73,28 +73,20 @@ class GameEngine:
         if (x, y) in self.obstacles:
             del self.obstacles[(x, y)]
 
-    def clear(self):
+    def clear(self, keep_obstacles=False):
         self.window.fill((0, 0, 0))
-        self.obstacles = {}
         self.draw_grid()
-        self.create_boundary()
+        if not keep_obstacles:
+            self.obstacles = {}
+            self.create_boundary()
+        else:
+            for obstacle in self.obstacles.values():
+                pygame.draw.rect(self.window, (255, 0, 0), obstacle)
+
+
 
     def draw_search_path(self, path):
         for i in range(len(path)-1):
             node_a = path[i]
             node_b = path[i+1]
             self.add_path(node_a[0], node_a[1], node_b[0], node_b[1])
-
-
-class Obstacle:
-    def __init__(self, x, y, grid_size):
-        self.x = x
-        self.y = y
-        self.width = grid_size
-        self.height = grid_size
-
-    def collidepoint(self, point):
-        if self.x <= point[0] <= self.x + self.width:
-            if self.y <= point[1] <= self.y + self.height:
-                return True
-        return False
