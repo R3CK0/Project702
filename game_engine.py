@@ -3,6 +3,7 @@
 
 import pygame
 
+# TODO: Add boundary walls to the game engine
 class GameEngine:
     def __init__(self, width=600, height=600, grid_size=30):
         pygame.init()
