@@ -5,6 +5,8 @@ class Node:
     def __init__(self, parent=None, position=None):
         self.parent = parent
         self.pos = position
+        self.samples = []
+        self.inspected = False
 
         self.g = 0
         self.h = 0
@@ -21,3 +23,7 @@ class Node:
 
     def get_pos(self):
         return self.pos
+
+    def save(self, samples):
+        self.samples = samples
+        self.inspected = True

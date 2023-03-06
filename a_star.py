@@ -3,7 +3,6 @@
 
 from queue import PriorityQueue
 from node import Node
-import pygame
 from collisionManager import CollisionManager2D
 
 # Description: A* pathfinding algorithm

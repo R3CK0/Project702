@@ -4,7 +4,6 @@
 from a_star import AStar2D
 from node import Node
 import random
-import pygame
 
 def calulate_distance(node1, node2):
     return ((node1.pos[0] - node2.pos[0]) ** 2 + (node1.pos[1] - node2.pos[1]) ** 2) ** 0.5
