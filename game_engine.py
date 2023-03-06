@@ -2,6 +2,7 @@
 #Date: 28/02/2023
 
 import pygame
+import time
 
 class GameEngine:
     def __init__(self, width=600, height=600, grid_size=30):
@@ -52,15 +53,19 @@ class GameEngine:
         return x, y
 
     # add a path to the pygame window
-    def add_path(self, x, y, x2, y2):
+    def add_path_centered(self, x, y, x2, y2, rgb=(0, 255, 0)):
         x = x - (x % self.grid_size) + (self.grid_size / 2)
         y = y - (y % self.grid_size) + (self.grid_size / 2)
         x2 = x2 - (x2 % self.grid_size) + (self.grid_size / 2)
         y2 = y2 - (y2 % self.grid_size) + (self.grid_size / 2)
-        pygame.draw.line(self.window, (0, 255, 0), (x, y), (x2, y2), 2)
+        pygame.draw.line(self.window, rgb, (x, y), (x2, y2), 2)
+        pygame.display.update()
+        time.sleep(0.01)
 
-    def add_path2(self, x, y, x2, y2):
-        pygame.draw.line(self.window, (255, 0, 0), (x, y), (x2, y2), 2)
+    def add_path(self, x, y, x2, y2, rgb=(0, 255, 0)):
+        pygame.draw.line(self.window, rgb, (x, y), (x2, y2), 2)
+        pygame.display.update()
+        time.sleep(0.01)
 
     def remove_obstacle(self, x, y):
         if x < self.grid_size or x > self.width - self.grid_size:
@@ -85,8 +90,14 @@ class GameEngine:
 
 
 
-    def draw_search_path(self, path):
-        for i in range(len(path)-1):
-            node_a = path[i]
-            node_b = path[i+1]
-            self.add_path(node_a[0], node_a[1], node_b[0], node_b[1])
+    def draw_search_path(self, path, center=False):
+        if center:
+            for i in range(len(path)-1):
+                node_a = path[i]
+                node_b = path[i+1]
+                self.add_path_centered(node_a[0], node_a[1], node_b[0], node_b[1])
+        else:
+            for i in range(len(path)-1):
+                node_a = path[i]
+                node_b = path[i+1]
+                self.add_path(node_a[0], node_a[1], node_b[0], node_b[1])

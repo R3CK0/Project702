@@ -3,7 +3,7 @@
 
 import game_engine as ge
 import a_star as astar
-from rrt import RRT
+from rrt import RRT2D
 import pygame
 
 # Main function
@@ -12,6 +12,7 @@ def main():
     window_width = 900
     window_height = 900
     grid_size = 30
+    environement = {"width": window_width, "height": window_height, "grid_size": grid_size}
     game_engine = ge.GameEngine(window_width, window_height, grid_size)
     game_engine.draw_grid()
     game_engine.create_boundary()
@@ -51,13 +52,18 @@ def main():
                     game_engine.remove_obstacle(x, y)
                 if event.key == pygame.K_SPACE:
                     if algo == 1:
-                        a_star = astar.AStar(window_width, window_height, grid_size, game_engine.obstacles, game_engine.window)
+                        a_star = astar.AStar2D(environement, game_engine)
                         path = a_star.find_path(start_pos, end_pos, progress)
                     if algo == 2:
-                        rrt = RRT(window_width, window_height, grid_size, game_engine.obstacles, game_engine.window, 1000)
-                        path = rrt.find_path(start_pos, end_pos, progress)
-                    if path is not None:
+                        rrt = RRT2D(environement, game_engine, 1000)
+                        path = rrt.find_path((start_pos[0] + grid_size/2, start_pos[1] + grid_size/2),
+                                                (end_pos[0] + grid_size/2, end_pos[1] +  grid_size/2), progress)
+                    if path is not None and algo == 1:
+                        game_engine.draw_search_path(path, True)
+                    elif path is not None:
                         game_engine.draw_search_path(path)
+                    else:
+                        print("No path found")
                 if event.key == pygame.K_p:
                     progress = not progress
                     print("Progress: " + str(progress))
