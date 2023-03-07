@@ -4,6 +4,7 @@
 class Node:
     def __init__(self, parent=None, position=None):
         self.parent = parent
+        self.child = None
         self.pos = position
         self.samples = []
         self.inspected = False

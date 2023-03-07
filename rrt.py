@@ -5,6 +5,7 @@ from a_star import AStar2D
 from node import Node
 import random
 import math
+import time
 
 def calulate_distance(node1, node2):
     return ((node1.pos[0] - node2.pos[0]) ** 2 + (node1.pos[1] - node2.pos[1]) ** 2) ** 0.5
@@ -75,7 +76,9 @@ class RRTStar2D(RRT2D):
         super().__init__(environement=environement, game_engine=game_engine, K=K)
         self.r = r
 
-    def find_path(self, start_pos, end_pos, progress=False):
+    def find_path(self, start_pos, end_pos, progress=False, optimise_time=None):
+        if optimise_time is not None:
+            start = time.time()
         path = []
         graph = []
 
@@ -88,22 +91,21 @@ class RRTStar2D(RRT2D):
             node = self.create_node()
             nearest_node = self.nearest_neighbour(graph, node)
             if nearest_node is not None:
-                if self.collision_manager.collision_check(nearest_node.pos, node.pos):
-                    new_node = self.steer(nearest_node, node)
-                    if self.collision_manager.collision_check(nearest_node.pos, new_node.pos):
-                        self.rewire(graph, new_node, nearest_node)
-                        if self.game_engine is not None:
-                            if progress:
-                                self.game_engine.add_path(new_node.parent.pos[0], new_node.parent.pos[1]
-                                                , new_node.pos[0], new_node.pos[1], (148, 0, 211))
-                    if calulate_distance(new_node, end_node) < self.r and self.collision_manager.collision_check(new_node.pos, end_node.pos):
-                        end_node.parent = new_node
-                        graph.append(end_node)
-                        if self.game_engine is not None:
-                            if progress:
-                                self.game_engine.add_path(new_node.pos[0], new_node.pos[1]
-                                                , end_node.pos[0], end_node.pos[1], (148, 0, 211))
-                        return self.reconstruct_path(end_node)
+                new_node = self.steer(nearest_node, node)
+                if self.collision_manager.collision_check(nearest_node.pos, new_node.pos):
+                    self.rewire(graph, new_node, nearest_node)
+                    if self.game_engine is not None:
+                        if progress:
+                            self.game_engine.add_path(new_node.parent.pos[0], new_node.parent.pos[1]
+                                            , new_node.pos[0], new_node.pos[1], (148, 0, 211))
+                if calulate_distance(new_node, end_node) < self.r and self.collision_manager.collision_check(new_node.pos, end_node.pos):
+                    end_node.parent = new_node
+                    graph.append(end_node)
+                    if self.game_engine is not None:
+                        if progress:
+                            self.game_engine.add_path(new_node.pos[0], new_node.pos[1]
+                                            , end_node.pos[0], end_node.pos[1], (148, 0, 211))
+                    return self.reconstruct_path(end_node)
 
         return None
 
@@ -138,67 +140,95 @@ class RRTStar2D(RRT2D):
                 near_nodes.append(n)
         return near_nodes
 
+    def optimise(self, current_node, graph, time_start, time_optimise):
+        path = []
+        while current_node is not None:
+            path.append(current_node.pos)
+            current_node = current_node.parent
+        path.reverse()
+        start_node = path[0]
+        end_node = path[-1]
+        c_best = self.path_length(end_node)
+        while time.time() - time_start < time_optimise:
+            for node in path:
+                if node is not start_node and node is not end_node:
+                    new_node = self.sample_near(node)
+                    nearest_node = self.nearest_neighbour(path, new_node)
+                    if nearest_node is not None:
+                        
+
+    def path_length(self, node):
+        if node.cost == 0:
+            return 0
+        return node.cost + self.path_length(node.parent)
+
+
+
 
 # Description: InformedRRT* pathfinding algorithm
 class InformedRRTStar2D(RRTStar2D):
-    def __init__(self, environement, game_engine, search_area, K=1000, r=50, goal_sample_rate=5, min_distance_to_goal=90, path_resolution=1):
+    def __init__(self, environement, game_engine, search_area, K=1000, r=50, goal_sample_rate=5, min_distance_to_goal=None, c_best = None):
         super().__init__(environement=environement, game_engine=game_engine, K=K, r=r)
         self.search_area = search_area
         self.goal_sample_rate = goal_sample_rate
         self.min_distance_to_goal = min_distance_to_goal
-        self.path_resolution = path_resolution
+        self.c_best = c_best
+        self.c_min = None
 
-    def find_path(self, start_pos, end_pos, progress=False):
+    def find_path(self, start_pos, end_pos, progress=False, optimise_time=None):
         graph = []
         path = []
         start_node = Node(None, start_pos)
         end_node = Node(None, end_pos)
         graph.append(start_node)
+        c_min = calulate_distance(start_node.pos, end_node.pos)
 
         for i in range(self.K):
-            if random.randint(0, 100) > self.goal_sample_rate:
+            if random.randint(0, 100) > self.goal_sample_rate and self.c_best is not None:
                 node = self.create_node()
             else:
                 node = end_node
             nearest_node = self.nearest_neighbour(graph, node)
             new_node = self.steer(nearest_node, node)
             if self.collision_manager.collision_check(nearest_node.pos, new_node.pos):
-                near_nodes = self.get_near_node(graph, new_node)
-                new_node = self.choose_parent(new_node, near_nodes)
-                if new_node is not None:
-                    self.rewire(graph, new_node, near_nodes)
-                    graph.append(new_node)
-                    if calulate_distance(new_node, end_node) < self.min_distance_to_goal:
-                        end_node.parent = new_node
-                        graph.append(end_node)
-                        if self.game_engine is not None:
-                            if progress:
-                                self.game_engine.add_path(new_node.pos[0], new_node.pos[1]
-                                                , end_node.pos[0], end_node.pos[1], (148, 0, 211))
-                        return self.reconstruct_path(end_node)
+                self.rewire(graph, new_node, nearest_node)
+                if progress:
+                    self.game_engine.add_path(new_node.parent.pos[0], new_node.parent.pos[1]
+                                              , new_node.pos[0], new_node.pos[1], (148, 0, 211))
+                if calulate_distance(new_node, end_node) < self.r:
+                    end_node.parent = new_node
+                    graph.append(end_node)
+                    if self.game_engine is not None:
+                        if progress:
+                            self.game_engine.add_path(new_node.pos[0], new_node.pos[1]
+                                            , end_node.pos[0], end_node.pos[1], (148, 0, 211))
+                    return self.reconstruct_path(end_node)
         return None
 
     def generate_random_point(self, bounds=None, min_dist=None):
-        x = random.randint(self.search_area[0][0], self.search_area[1])
-        y = random.randint(self.search_area[2], self.search_area[3])
+        x = random.randint(self.search_area[0][0], self.search_area[0][1])
+        y = random.randint(self.search_area[1][0], self.search_area[1][1])
         return (x, y)
 
     def steer(self, from_node, to_node):
         extend_length = self.r
         new_node = Node(None, from_node.pos)
-        d, theta = self.calulate_distance_and_angle(new_node, to_node)
+        d, theta = self.calculate_distance_and_angle(new_node, to_node)
         if d < extend_length:
             extend_length = d
         new_node.cost += extend_length
-        new_node.pos = self.calulate_new_position(new_node, theta, extend_length)
         new_node.parent = from_node
+        new_node.pos = self.calculate_new_position(new_node, theta, extend_length)
         return new_node
 
-    def calulate_distance_and_angle(self, from_node, to_node):
+    def calculate_distance_and_angle(self, from_node, to_node):
         dx = to_node.pos[0] - from_node.pos[0]
         dy = to_node.pos[1] - from_node.pos[1]
         d = math.sqrt(dx**2 + dy**2)
         theta = math.atan2(dy, dx)
         return d, theta
     
-    def propagate_cost_to_leaves(self, parent_node, graph, expand_distance):
+    def calculate_new_position(self, new_node, theta, extend_lenght):
+        x = new_node.parent.pos[0] + extend_lenght * math.cos(theta)
+        y = new_node.parent.pos[1] + extend_lenght * math.sin(theta)
+        return (x, y)
