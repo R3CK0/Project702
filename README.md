@@ -13,3 +13,7 @@
 - To select the algorithm
 - - Press 1 for A*
 - - Press 2 for RRT
+- - Press 3 for RRT*
+- - Press 4 for InformedRRT*
+- - Press 5 for bit*
+- - Press 6 for abit*
