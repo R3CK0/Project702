@@ -162,11 +162,12 @@ class RRTStar2D(RRT2D):
                 if node is not start_node and node is not end_node:
                     new_node = self.sample_near(node)
                     nearest_node = self.nearest_neighbour(path, new_node)
-                    if nearest_node is not None and nearest_node.parent is not None and nearest_node.child is not None:
-                        if nearest_node.child.cost > (nearest_node.parent.cost + calulate_distance(nearest_node.parent, new_node) + calulate_distance(new_node, nearest_node.child)):
-                            self.rewire_path(nearest_node, new_node, path)
-                            self.propagate_cost_to_leaves(path[0])
-                            c_best = new_node.cost
+                    if self.collision_manager.collision_check(new_node.pos, nearest_node.parent.pos) and self.collision_manager.collision_check(new_node.pos, nearest_node.child.pos):
+                        if nearest_node is not None and nearest_node.parent is not None and nearest_node.child is not None:
+                            if nearest_node.child.cost > (nearest_node.parent.cost + calulate_distance(nearest_node.parent, new_node) + calulate_distance(new_node, nearest_node.child)):
+                                self.rewire_path(nearest_node, new_node, path)
+                                self.propagate_cost_to_leaves(path[0])
+                                c_best = new_node.cost
         print("Initial cost: ", c_best_init)
         print("Optimised cost: ", c_best)
         return path
