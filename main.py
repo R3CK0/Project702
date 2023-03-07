@@ -3,7 +3,7 @@
 
 import game_engine as ge
 import a_star as astar
-from rrt import RRT2D
+from rrt import RRT2D, RRTStar2D
 from fmt import FMTStar2D
 import pygame
 
@@ -60,9 +60,13 @@ def main():
                         path = rrt.find_path((start_pos[0] + grid_size/2, start_pos[1] + grid_size/2),
                                                 (end_pos[0] + grid_size/2, end_pos[1] +  grid_size/2), progress)
                     if algo == 3:
-                        fmt = FMTStar2D(environement, game_engine)
+                        rrt_star = RRTStar2D(environement, game_engine, 1000)
+                        path = rrt_star.find_path((start_pos[0] + grid_size/2, start_pos[1] + grid_size/2),
+                                                (end_pos[0] + grid_size/2, end_pos[1] +  grid_size/2), progress)
+                    if algo == 4:
+                        fmt = FMTStar2D(environement, game_engine, radius_multiplier=1.8)
                         path = fmt.find_path((start_pos[0] + grid_size/2, start_pos[1] + grid_size/2),
-                                                (end_pos[0] + grid_size/2, end_pos[1] +  grid_size/2), progress, 1000)
+                                                (end_pos[0] + grid_size/2, end_pos[1] +  grid_size/2), progress, 300)
                     if path is not None and algo == 1:
                         game_engine.draw_search_path(path, True)
                     elif path is not None:
@@ -82,6 +86,9 @@ def main():
                     print("RRT")
                 if event.key == pygame.K_3:
                     algo = 3
+                    print("RRT*")
+                if event.key == pygame.K_4:
+                    algo = 4
                     print("FMT*")
             game_engine.draw_grid()
 

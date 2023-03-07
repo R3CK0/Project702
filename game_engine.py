@@ -88,8 +88,6 @@ class GameEngine:
             for obstacle in self.obstacles.values():
                 pygame.draw.rect(self.window, (255, 0, 0), obstacle)
 
-
-
     def draw_search_path(self, path, center=False):
         if center:
             for i in range(len(path)-1):

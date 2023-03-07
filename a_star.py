@@ -5,13 +5,13 @@ from queue import PriorityQueue
 from node import Node
 from collisionManager import CollisionManager2D
 
+
 # Description: A* pathfinding algorithm
 class AStar2D:
     def __init__(self, environement, game_engine=None):
         self.environement = environement
         self.game_engine = game_engine
         self.collision_manager = CollisionManager2D(self.game_engine.obstacles, self.environement)
-
 
     # Find a path from start to end
     def find_path(self, start_pos, end_pos, progress=False):
@@ -31,7 +31,6 @@ class AStar2D:
             # Get the current node
             current_node = open_set.get()[1]
             closed_set.add(current_node)
-
 
             # If the current node is the end node, return the path
             if current_node == end_node:
