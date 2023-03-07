@@ -15,5 +15,6 @@
 - - Press 2 for RRT
 - - Press 3 for RRT*
 - - Press 4 for InformedRRT*
-- - Press 5 for bit*
-- - Press 6 for abit*
+- - Press 5 for FMT*
+- - Press 6 for BIT*
+- - Press 7 for ABIT*
