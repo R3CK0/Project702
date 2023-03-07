@@ -62,7 +62,7 @@ def main():
                     if algo == 3:
                         rrt_star = RRTStar2D(environement, game_engine, 1000)
                         path = rrt_star.find_path((start_pos[0] + grid_size/2, start_pos[1] + grid_size/2),
-                                                (end_pos[0] + grid_size/2, end_pos[1] +  grid_size/2), progress)
+                                                (end_pos[0] + grid_size/2, end_pos[1] +  grid_size/2), progress, 5)
                     if algo == 4:
                         fmt = FMTStar2D(environement, game_engine, radius_multiplier=1.8)
                         path = fmt.find_path((start_pos[0] + grid_size/2, start_pos[1] + grid_size/2),

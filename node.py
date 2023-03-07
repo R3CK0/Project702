@@ -29,3 +29,15 @@ class Node:
     def save(self, samples):
         self.samples = samples
         self.inspected = True
+
+    def set_parent(self, parent):
+        self.parent = parent
+
+    def set_child(self, child):
+        self.child = child
+
+    def get_parent(self):
+        return self.parent
+
+    def get_child(self):
+        return self.child

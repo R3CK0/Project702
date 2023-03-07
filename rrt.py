@@ -77,6 +77,7 @@ class RRTStar2D(RRT2D):
         self.r = r
 
     def find_path(self, start_pos, end_pos, progress=False, optimise_time=None):
+        start = 0
         if optimise_time is not None:
             start = time.time()
         path = []
@@ -100,13 +101,17 @@ class RRTStar2D(RRT2D):
                                             , new_node.pos[0], new_node.pos[1], (148, 0, 211))
                 if calulate_distance(new_node, end_node) < self.r and self.collision_manager.collision_check(new_node.pos, end_node.pos):
                     end_node.parent = new_node
+                    end_node.cost = new_node.cost + calulate_distance(new_node, end_node)
                     graph.append(end_node)
                     if self.game_engine is not None:
                         if progress:
                             self.game_engine.add_path(new_node.pos[0], new_node.pos[1]
                                             , end_node.pos[0], end_node.pos[1], (148, 0, 211))
-                    return self.reconstruct_path(end_node)
-
+                    if optimise_time is not None:
+                        path = self.optimise_path(end_node, start, optimise_time)
+                        return self.reconstruct_path(path[-1])
+                    else:
+                        return self.reconstruct_path(end_node)
         return None
 
     def steer(self, nearest_node, node):
@@ -117,18 +122,18 @@ class RRTStar2D(RRT2D):
         return new_node
 
     def rewire(self, graph, new_node, nearest_node):
-        near_nodes = self.get_near_node(graph, new_node)
-        min_cost_node = nearest_node
-        min_cost = self.get_cost(nearest_node) + calulate_distance(nearest_node, new_node)
-        for near_node in near_nodes:
-            if self.collision_manager.collision_check(near_node.pos, new_node.pos):
-                cost = self.get_cost(near_node) + calulate_distance(near_node, new_node)
-                if cost < min_cost and self.collision_manager.collision_check(near_node.pos, new_node.pos):
-                    min_cost = cost
-                    min_cost_node = near_node
-        new_node.parent = min_cost_node
-        new_node.cost = min_cost
-        graph.append(new_node)
+            near_nodes = self.get_near_node(graph, new_node)
+            min_cost_node = nearest_node
+            min_cost = self.get_cost(nearest_node) + calulate_distance(nearest_node, new_node)
+            for near_node in near_nodes:
+                if self.collision_manager.collision_check(near_node.pos, new_node.pos):
+                    cost = self.get_cost(near_node) + calulate_distance(near_node, new_node)
+                    if cost < min_cost and self.collision_manager.collision_check(near_node.pos, new_node.pos):
+                        min_cost = cost
+                        min_cost_node = near_node
+            new_node.parent = min_cost_node
+            new_node.cost = min_cost
+            graph.append(new_node)
 
     def get_cost(self, node):
         return node.cost
@@ -140,27 +145,52 @@ class RRTStar2D(RRT2D):
                 near_nodes.append(n)
         return near_nodes
 
-    def optimise(self, current_node, graph, time_start, time_optimise):
+    def optimise_path(self, current_node, time_start, time_optimise):
         path = []
         while current_node is not None:
-            path.append(current_node.pos)
+            path.append(current_node)
+            if current_node.parent is not None:
+                current_node.parent.set_child(current_node)
             current_node = current_node.parent
         path.reverse()
         start_node = path[0]
         end_node = path[-1]
-        c_best = self.path_length(end_node)
+        c_best_init = end_node.cost
+        c_best = c_best_init
         while time.time() - time_start < time_optimise:
             for node in path:
                 if node is not start_node and node is not end_node:
                     new_node = self.sample_near(node)
                     nearest_node = self.nearest_neighbour(path, new_node)
-                    if nearest_node is not None:
-                        
+                    if nearest_node is not None and nearest_node.parent is not None and nearest_node.child is not None:
+                        if nearest_node.child.cost > (nearest_node.parent.cost + calulate_distance(nearest_node.parent, new_node) + calulate_distance(new_node, nearest_node.child)):
+                            self.rewire_path(nearest_node, new_node, path)
+                            self.propagate_cost_to_leaves(path[0])
+                            c_best = new_node.cost
+        print("Initial cost: ", c_best_init)
+        print("Optimised cost: ", c_best)
+        return path
 
-    def path_length(self, node):
-        if node.cost == 0:
-            return 0
-        return node.cost + self.path_length(node.parent)
+    def sample_near(self, node):
+        new_node = Node(None, node.pos)
+        new_node.pos = (node.pos[0] + random.uniform(-self.r/2, self.r/2),
+                        node.pos[1] + random.uniform(-self.r/2, self.r/2))
+        return new_node
+
+    def rewire_path(self, nearest_node, new_node, path):
+        cost = nearest_node.parent.cost
+        new_node.parent = nearest_node.parent
+        new_node.child = nearest_node.child
+        new_node.cost = cost + calulate_distance(nearest_node.parent, new_node)
+        nearest_node.parent.set_child(new_node)
+        nearest_node.child.set_parent(new_node)
+        nearest_node.child.cost = new_node.cost + calulate_distance(new_node, nearest_node.child)
+        path[path.index(nearest_node)] = new_node
+
+    def propagate_cost_to_leaves(self, node):
+        if node.child is not None:
+            node.child.cost = node.cost + calulate_distance(node, node.child)
+            self.propagate_cost_to_leaves(node.child)
 
 
 
