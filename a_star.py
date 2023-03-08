@@ -8,10 +8,13 @@ from collisionManager import CollisionManager2D
 
 # Description: A* pathfinding algorithm
 class AStar2D:
-    def __init__(self, environement, game_engine=None):
+    def __init__(self, environement, game_engine=None, benchmark=False):
         self.environement = environement
-        self.game_engine = game_engine
-        self.collision_manager = CollisionManager2D(self.game_engine.obstacles, self.environement)
+        if not benchmark:
+            self.game_engine = game_engine
+        else:
+            self.game_engine = None
+        self.collision_manager = CollisionManager2D(game_engine.obstacles, self.environement)
 
     # Find a path from start to end
     def find_path(self, start_pos, end_pos, progress=False):

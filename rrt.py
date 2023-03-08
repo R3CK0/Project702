@@ -15,8 +15,8 @@ def calculate_distance(node1, node2):
 
 
 class RRT2D(AStar2D):
-    def __init__(self, environement, game_engine=None, K=1000):
-        super().__init__(environement=environement, game_engine=game_engine)
+    def __init__(self, environement, game_engine=None, K=1000, benchmark=False):
+        super().__init__(environement=environement, game_engine=game_engine, benchmark=benchmark)
         self.K = K
 
     def find_path(self, start_pos, end_pos, progress=False):
@@ -76,8 +76,8 @@ class RRT2D(AStar2D):
 
 
 class RRTStar2D(RRT2D):
-    def __init__(self, environement, game_engine, K=1000, r=50):
-        super().__init__(environement=environement, game_engine=game_engine, K=K)
+    def __init__(self, environement, game_engine=None, K=1000, r=50, benchmark=False):
+        super().__init__(environement=environement, game_engine=game_engine, K=K, benchmark=benchmark)
         self.r = r
 
     def find_path(self, start_pos, end_pos, progress=False, optimise_time=None):
@@ -176,14 +176,15 @@ class RRTStar2D(RRT2D):
                                     nearest_node.parent, new_node)
                                                           + calculate_distance(new_node, nearest_node.child)):
                                 self.rewire_path(nearest_node, new_node, path)
-                                if progress:
-                                    temp_time_start = time.time()
-                                    self.game_engine.add_path(nearest_node.parent.pos[0], nearest_node.parent.pos[1],
-                                                              new_node.pos[0], new_node.pos[1], (148, 0, 211))
-                                    self.game_engine.add_path(nearest_node.child.pos[0], nearest_node.child.pos[1],
-                                                              new_node.pos[0], new_node.pos[1], (148, 0, 211))
-                                    temp_time_stop = time.time()
-                                    time_start += temp_time_stop - temp_time_start
+                                if self.game_engine is not None:
+                                    if progress:
+                                        temp_time_start = time.time()
+                                        self.game_engine.add_path(nearest_node.parent.pos[0], nearest_node.parent.pos[1],
+                                                                  new_node.pos[0], new_node.pos[1], (148, 0, 211))
+                                        self.game_engine.add_path(nearest_node.child.pos[0], nearest_node.child.pos[1],
+                                                                  new_node.pos[0], new_node.pos[1], (148, 0, 211))
+                                        temp_time_stop = time.time()
+                                        time_start += temp_time_stop - temp_time_start
                                 self.propagate_cost_to_leaves(path[0])
         c_best = path[-1].cost
         print("Initial cost: ", c_best_init)
@@ -214,8 +215,8 @@ class RRTStar2D(RRT2D):
 
 # Description: InformedRRT* pathfinding algorithm
 class InformedRRTStar2D(RRTStar2D):
-    def __init__(self, environement, game_engine, K=1000, r=100, goal_sample_rate=5):
-        super().__init__(environement=environement, game_engine=game_engine, K=K, r=r)
+    def __init__(self, environement, game_engine, K=1000, r=100, goal_sample_rate=5, benchmark=False):
+        super().__init__(environement=environement, game_engine=game_engine, K=K, r=r, benchmark=benchmark)
         self.goal_sample_rate = goal_sample_rate
 
     def optimise_path(self, current_node, time_start, time_optimise, progress=False, graph=None):
@@ -341,12 +342,13 @@ class InformedRRTStar2D(RRTStar2D):
         center = ((start_node.pos[0] + goal_node.pos[0]) / 2, (start_node.pos[1] + goal_node.pos[1]) / 2)
         b = math.sqrt(c_best**2 - c_min**2)
         angle = math.atan2(goal_node.pos[1]-start_node.pos[1], goal_node.pos[0]-start_node.pos[0])
-        if start_node.pos[1]-goal_node.pos[1] == 0:
-            self.game_engine.draw_rectangle(center[0], center[1])
-            self.game_engine.draw_ellipse(center[0], center[1], c_best, b)
-        if start_node.pos[0] - goal_node.pos[0] == 0:
-            self.game_engine.draw_rectangle(center[0], center[1])
-            self.game_engine.draw_ellipse(center[0], center[1], b, c_best)
+        if self.game_engine is not None:
+            if start_node.pos[1]-goal_node.pos[1] == 0:
+                self.game_engine.draw_rectangle(center[0], center[1])
+                self.game_engine.draw_ellipse(center[0], center[1], c_best, b)
+            if start_node.pos[0] - goal_node.pos[0] == 0:
+                self.game_engine.draw_rectangle(center[0], center[1])
+                self.game_engine.draw_ellipse(center[0], center[1], b, c_best)
         return {'center': center, 'c_best': c_best, 'c_min': c_min,  'b': b, 'angle': angle}
 
     def inEllipse(self, node, elipsoid_params):
