@@ -88,8 +88,6 @@ class GameEngine:
             for obstacle in self.obstacles.values():
                 pygame.draw.rect(self.window, (255, 0, 0), obstacle)
 
-
-
     def draw_search_path(self, path, center=False):
         if center:
             for i in range(len(path)-1):
@@ -101,3 +99,26 @@ class GameEngine:
                 node_a = path[i]
                 node_b = path[i+1]
                 self.add_path(node_a[0], node_a[1], node_b[0], node_b[1])
+        pygame.display.update()
+
+    def draw_ellipse(self, x, y, a, b, rgb=(255, 255, 0)):
+        pygame.draw.ellipse(self.window, rgb, pygame.Rect(x-a/2, y-b/2, a, b), 2)
+        pygame.display.update()
+        time.sleep(0.01)
+
+    def draw_rectangle(self, x, y):
+        pygame.draw.rect(self.window, (255, 255, 0), pygame.Rect(x, y, 10, 10))
+        pygame.display.update()
+        time.sleep(0.01)
+
+    def draw_small_rectangle(self, x, y):
+        pygame.draw.rect(self.window, (255, 255, 0), pygame.Rect(x, y, 5, 5))
+        pygame.display.update()
+
+    def draw_ellipse_angled(self, rect, angle, color=(255, 255, 0), width=2):
+        surface = pygame.display.set_mode((rect[2], rect[3]))
+        target_rect = pygame.Rect(rect)
+        shape_surf = pygame.Surface(target_rect.size, pygame.SRCALPHA)
+        pygame.draw.ellipse(shape_surf, color, (0, 0, *target_rect.size), width)
+        rotated_surf = pygame.transform.rotate(shape_surf, angle)
+        surface.blit(rotated_surf, rotated_surf.get_rect(center=target_rect.center))

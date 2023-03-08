@@ -13,3 +13,10 @@
 - To select the algorithm
 - - Press 1 for A*
 - - Press 2 for RRT
+- - Press 3 for RRT*
+- - Press 4 for InformedRRT*
+- - Press 5 for FMT*
+- - Press 6 for BIT*
+- - Press 7 for ABIT* (not implemented yet)
+- - To cycle through optimisation click o
+- - To activate Benchmark mode, press b (while in bemchmark mode, progress will not be displayed)
