@@ -7,8 +7,15 @@ from rrt import RRT2D, RRTStar2D, InformedRRTStar2D
 from fmt import FMTStar2D
 from bit_star import BitStar
 import pygame
+import time
 
-
+def calculate_distance(node1, node2):
+    return ((node1[0] - node2[0]) ** 2 + (node1[1] - node2[1]) ** 2) ** 0.5
+def path_length(path):
+    length = 0
+    for i in range(len(path)-1):
+        length += calculate_distance(path[i], path[i+1])
+    return length
 # Main function
 def main():
     # Create pygame window and draw grid
@@ -55,6 +62,7 @@ def main():
                     x, y = pygame.mouse.get_pos()
                     game_engine.remove_obstacle(x, y)
                 if event.key == pygame.K_SPACE:
+                    time_start = time.time()
                     if algo == 1:
                         a_star = astar.AStar2D(environement, game_engine)
                         path = a_star.find_path(start_pos, end_pos, progress)
@@ -78,10 +86,17 @@ def main():
                         bit_star = BitStar(environement, game_engine, radius_multiplier=1.8, K=150)
                         path = bit_star.find_path((start_pos[0] + grid_size/2, start_pos[1] + grid_size/2),
                                                 (end_pos[0] + grid_size/2, end_pos[1] +  grid_size/2), progress, optimize_time)
+                    time_stop = time.time()
                     if path is not None and algo == 1:
                         game_engine.draw_search_path(path, True)
+                        print("Path found")
+                        print("Path length: " + str(path_length(path)))
+                        print('Time taken: ' + str(time_stop - time_start) + ' seconds')
                     elif path is not None:
                         game_engine.draw_search_path(path)
+                        print("Path found")
+                        print("Path length: " + str(path_length(path)))
+                        print('Time taken: ' + str(time_stop - time_start) + ' seconds')
                     else:
                         print("No path found")
                 if event.key == pygame.K_p:

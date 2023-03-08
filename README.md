@@ -17,4 +17,6 @@
 - - Press 4 for InformedRRT*
 - - Press 5 for FMT*
 - - Press 6 for BIT*
-- - Press 7 for ABIT*
+- - Press 7 for ABIT* (not implemented yet)
+- - To cycle through optimisation click o
+- - To activate Benchmark mode, press b (while in bemchmark mode, progress will not be displayed)
