@@ -336,29 +336,6 @@ class InformedRRTStar2D(RRTStar2D):
                 node = Node(position=point)
                 return node
 
-    def rotationToWorldFrame(self, start_node, goal_node):
-        a = []
-        d = calculate_distance(start_node, goal_node)
-        for i in range(len(start_node.pos)):
-            a.append((goal_node.pos[i]-start_node.pos[i])/d)
-        I = np.identity(len(start_node.pos))
-        M = np.asarray(a)@I.T
-        return M
-
-    def sampleUnitBall(self):
-        d = random.random()
-        theta = random.random()*2*math.pi
-        return (d*math.cos(theta), d*math.sin(theta))
-
-    def calculate_elipsoid_params(self, start_node, goal_node, c_best):
-        c_min = calculate_distance(start_node, goal_node)
-        center = ((start_node.pos[0] + goal_node.pos[0]) / 2, (start_node.pos[1] + goal_node.pos[1]) / 2)
-        C = self.rotationToWorldFrame(start_node, goal_node)
-        r1 = c_best/2
-        r2 = math.sqrt(c_best**2 - c_min**2)/2
-        L = np.asarray([r1, r2])
-        return {'C': C, 'L': L, 'center': center, 'c_best': c_best, 'c_min': c_min}
-
     def calculate_elipsoid_params_homebrew(self, start_node, goal_node, c_best):
         c_min = calculate_distance(start_node, goal_node)
         center = ((start_node.pos[0] + goal_node.pos[0]) / 2, (start_node.pos[1] + goal_node.pos[1]) / 2)
@@ -373,13 +350,18 @@ class InformedRRTStar2D(RRTStar2D):
         return {'center': center, 'c_best': c_best, 'c_min': c_min,  'b': b, 'angle': angle}
 
     def inEllipse(self, node, elipsoid_params):
-        dx = node.pos[0] - elipsoid_params['center'][0]
-        dy = node.pos[1] - elipsoid_params['center'][1]
+        center = elipsoid_params['center']
+        pos = self.rotate_vector((node.pos[0] - center[0], node.pos[1] - center[1]), -elipsoid_params['angle'])
+        pos = (pos[0] + center[0], pos[1] + center[1])
 
-        a = elipsoid_params['c_best']
-        b = math.sqrt(elipsoid_params['c_best']**2-elipsoid_params['c_min']**2)
-        dist = dx**2 / a**2 + dy**2 / b**2
+        dx = pos[0] - center[0]
+        dy = pos[1] - center[1]
 
+        semi_major = elipsoid_params['c_best']/2
+        semi_minor = math.sqrt(elipsoid_params['c_best']**2-elipsoid_params['c_min']**2)/2
+        if semi_major <= 0 or semi_minor <= 0:
+            return False
+        dist = dx**2 / semi_major**2 + dy**2 / semi_minor**2
         if dist <= 1:
             return True
         else:

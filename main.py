@@ -5,7 +5,9 @@ import game_engine as ge
 import a_star as astar
 from rrt import RRT2D, RRTStar2D, InformedRRTStar2D
 from fmt import FMTStar2D
+from bit_star import BitStar
 import pygame
+
 
 # Main function
 def main():
@@ -71,7 +73,11 @@ def main():
                     if algo == 5:
                         fmt = FMTStar2D(environement, game_engine, radius_multiplier=1.8)
                         path = fmt.find_path((start_pos[0] + grid_size/2, start_pos[1] + grid_size/2),
-                                                (end_pos[0] + grid_size/2, end_pos[1] +  grid_size/2), progress, 300)
+                                                (end_pos[0] + grid_size/2, end_pos[1] +  grid_size/2), progress, 150)
+                    if algo == 6:
+                        bit_star = BitStar(environement, game_engine, radius_multiplier=1.8, K=150)
+                        path = bit_star.find_path((start_pos[0] + grid_size/2, start_pos[1] + grid_size/2),
+                                                (end_pos[0] + grid_size/2, end_pos[1] +  grid_size/2), progress, optimize_time)
                     if path is not None and algo == 1:
                         game_engine.draw_search_path(path, True)
                     elif path is not None:
@@ -99,6 +105,9 @@ def main():
                 if event.key == pygame.K_5:
                     algo = 5
                     print("FMT*")
+                if event.key == pygame.K_6:
+                    algo = 6
+                    print("BIT*")
                 if event.key == pygame.K_o:
                     if optimize_time is None:
                         optimize_time = 0.2
