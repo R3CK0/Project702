@@ -1,4 +1,5 @@
-
+# Author: Nicholas Massad
+# Date: 03/03/2023
 
 class CollisionManager2D:
     def __init__(self, obstacles, environment):

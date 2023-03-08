@@ -1,3 +1,6 @@
+# Author: Nicholas Massad
+# Date: 03/03/2023
+
 from node import Node
 from collisionManager import CollisionManager2D
 import math
