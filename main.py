@@ -69,23 +69,23 @@ def main():
                     if algo == 2:
                         rrt = RRT2D(environement, game_engine, 1000)
                         path = rrt.find_path((start_pos[0] + grid_size/2, start_pos[1] + grid_size/2),
-                                                (end_pos[0] + grid_size/2, end_pos[1] +  grid_size/2), progress)
+                                                (end_pos[0] + grid_size/2, end_pos[1] + grid_size/2), progress)
                     if algo == 3:
                         rrt_star = RRTStar2D(environement, game_engine, 1000)
                         path = rrt_star.find_path((start_pos[0] + grid_size/2, start_pos[1] + grid_size/2),
-                                                (end_pos[0] + grid_size/2, end_pos[1] +  grid_size/2), progress, optimize_time)
+                                                (end_pos[0] + grid_size/2, end_pos[1] + grid_size/2), progress, optimize_time)
                     if algo == 4:
                         informedRRTStar = InformedRRTStar2D(environement, game_engine, 1000)
                         path = informedRRTStar.find_path((start_pos[0] + grid_size/2, start_pos[1] + grid_size/2),
-                                                (end_pos[0] + grid_size/2, end_pos[1] +  grid_size/2), progress, optimize_time)
+                                                (end_pos[0] + grid_size/2, end_pos[1] + grid_size/2), progress, optimize_time)
                     if algo == 5:
                         fmt = FMTStar2D(environement, game_engine, radius_multiplier=1.8)
                         path = fmt.find_path((start_pos[0] + grid_size/2, start_pos[1] + grid_size/2),
-                                                (end_pos[0] + grid_size/2, end_pos[1] +  grid_size/2), progress, 150)
+                                                (end_pos[0] + grid_size/2, end_pos[1] + grid_size/2), progress, 150)
                     if algo == 6:
                         bit_star = BitStar(environement, game_engine, radius_multiplier=1.8, K=150)
                         path = bit_star.find_path((start_pos[0] + grid_size/2, start_pos[1] + grid_size/2),
-                                                (end_pos[0] + grid_size/2, end_pos[1] +  grid_size/2), progress, optimize_time)
+                                                (end_pos[0] + grid_size/2, end_pos[1] + grid_size/2), progress, optimize_time)
                     time_stop = time.time()
                     if path is not None and algo == 1:
                         game_engine.draw_search_path(path, True)

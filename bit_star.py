@@ -15,17 +15,20 @@ def calculate_distance(node1, node2):
     return ((node1.pos[0] - node2.pos[0]) ** 2 + (node1.pos[1] - node2.pos[1]) ** 2) ** 0.5
 
 class BitStar(InformedRRTStar2D, FMTStar2D):
-    def __init__(self, environement, game_engine, radius_multiplier=2.3, dimension=2, free_space_volume=None, K = 200):
-        super().__init__(environement, game_engine)
+    def __init__(self, environement, game_engine, radius_multiplier=1.8, dimension=2, free_space_volume=None, K = 200, benchmark=False):
+        super().__init__(environement, game_engine, benchmark=benchmark)
         self.K = K
         self.radius_multiplier = radius_multiplier
-        self.game_engine = game_engine
+        if not benchmark:
+            self.game_engine = game_engine
+        else:
+            self.game_engine = None
         self.environement = environement
         self.dimension = dimension
-        self.collision_manager = CollisionManager2D(self.game_engine.obstacles, self.environement)
+        self.collision_manager = CollisionManager2D(game_engine.obstacles, self.environement)
         if free_space_volume is None:
             self.free_space_volume = (environement['width'] - 2 * environement['grid_size']) * (
-                        environement['height'] - 2 * environement['grid_size']) - len(self.game_engine.obstacles) * \
+                        environement['height'] - 2 * environement['grid_size']) - len(self.collision_manager.obstacles) * \
                                      environement['grid_size'] ** 2
         else:
             self.free_space_volume = free_space_volume
@@ -36,6 +39,7 @@ class BitStar(InformedRRTStar2D, FMTStar2D):
 
     # TODO: fix the bug with the block in front of the start
     def find_path(self, start_pos, end_pos, progress=False, optimise_time=None):
+        safety_time = time.time()
         unvisited_set = self.sampleFree(self.K)
         open_set = PriorityQueue()
         closed_set = set()
@@ -53,7 +57,11 @@ class BitStar(InformedRRTStar2D, FMTStar2D):
         current_node = self.start_node
         start = True
         Found_path = False
-        while current_node is not self.end_node:
+        if optimise_time is None:
+            stop_safety = 3
+        else:
+            stop_safety = optimise_time+1
+        while current_node is not self.end_node and time.time() - safety_time < stop_safety:
             self.expand_tree(current_node, open_set, unvisited_set, radius, progress)
             closed_set.add(current_node)
             if start:
@@ -69,6 +77,7 @@ class BitStar(InformedRRTStar2D, FMTStar2D):
                 if optimise_time is not None:
                     return self.optimise_path(current_node, time.time(), optimise_time, radius, progress, graph=closed_set)
                 return self.reconstruct_path(self.end_node)
+        return None
 
 
     def create_node(self, elipsoid_params=None):
@@ -126,14 +135,15 @@ class BitStar(InformedRRTStar2D, FMTStar2D):
                             y.cost = nearY[ymin].cost + calculate_distance(y, nearY[ymin])
                             open.put((y.cost, y))
                             del unvisited[y.pos]
-                            if progress:
-                                if start_time is not None:
-                                    temp_start_time = time.time()
-                                    self.game_engine.add_path(y.pos[0], y.pos[1], y.parent.pos[0], y.parent.pos[1], rgb=(148, 0, 211))
-                                    temp_stop_time = time.time()
-                                    start_time += temp_stop_time - temp_start_time
-                                else:
-                                    self.game_engine.add_path(y.pos[0], y.pos[1], y.parent.pos[0], y.parent.pos[1], rgb=(148, 0, 211))
+                            if self.game_engine is not None:
+                                if progress:
+                                    if start_time is not None:
+                                        temp_start_time = time.time()
+                                        self.game_engine.add_path(y.pos[0], y.pos[1], y.parent.pos[0], y.parent.pos[1], rgb=(148, 0, 211))
+                                        temp_stop_time = time.time()
+                                        start_time += temp_stop_time - temp_start_time
+                                    else:
+                                        self.game_engine.add_path(y.pos[0], y.pos[1], y.parent.pos[0], y.parent.pos[1], rgb=(148, 0, 211))
     def optimise_path(self, current_node, time_start, time_optimise, radius=None, progress=False, graph=None):
         path_list = PriorityQueue()
         open_set = PriorityQueue()
