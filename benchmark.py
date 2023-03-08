@@ -107,6 +107,7 @@ class Benchmark:
                 self.build_environment(size, obstacle_coverage)
                 self.load_algorithms()
                 for algo in algorithms:
+                    print("Running benchmarking for {} with {}% obstacle coverage".format(algo, obstacle_coverage*100))
                     args = [tuple((algo, 0)) for i in range(attemps)]
                     results = pool.map(self.run_benchmarking_attemps, args)
                     for result in results:
@@ -126,6 +127,7 @@ class Benchmark:
                 self.build_environment(size, obstacle_coverage)
                 self.load_algorithms()
                 for algo in optim_algo:
+                    print("Running benchmarking for {} with {}% obstacle coverage".format(algo, obstacle_coverage * 100))
                     for optim in range(1, times_to_double):
                         optim_time = start_optim**optim
                         args = [tuple((algo, optim_time)) for i in range(attemps)]

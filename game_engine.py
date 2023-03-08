@@ -19,7 +19,7 @@ class GameEngine:
 
     # Draw a grid on the pygame window
     def draw_grid(self):
-        if self.window is None:
+        if self.window is not None:
             for i in range(0, self.width, self.grid_size):
                 pygame.draw.line(self.window, (255, 255, 255), (i, 0), (i, self.height))
             for i in range(0, self.height, self.grid_size):
