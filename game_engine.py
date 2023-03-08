@@ -24,6 +24,7 @@ class GameEngine:
                 pygame.draw.line(self.window, (255, 255, 255), (i, 0), (i, self.height))
             for i in range(0, self.height, self.grid_size):
                 pygame.draw.line(self.window, (255, 255, 255), (0, i), (self.width, i))
+        pass
 
     def create_boundary(self):
         for i in range(0, self.width, self.grid_size):
@@ -37,9 +38,11 @@ class GameEngine:
     def add_obstacle(self, x, y):
         x = x - (x % self.grid_size)
         y = y - (y % self.grid_size)
-        obstacle = pygame.Rect(x, y, self.grid_size, self.grid_size)
         if self.window is not None:
+            obstacle = pygame.Rect(x, y, self.grid_size, self.grid_size)
             pygame.draw.rect(self.window, (255, 0, 0), obstacle)
+        else:
+            obstacle = Rect(x, y)
         if (x, y) not in self.obstacles:
             self.obstacles[(x, y)] = obstacle
 
@@ -75,6 +78,7 @@ class GameEngine:
             pygame.draw.line(self.window, rgb, (x, y), (x2, y2), 2)
             pygame.display.update()
             time.sleep(0.01)
+        pass
 
     def remove_obstacle(self, x, y):
         if x < self.grid_size or x > self.width - self.grid_size:
@@ -89,8 +93,9 @@ class GameEngine:
             del self.obstacles[(x, y)]
 
     def clear(self, keep_obstacles=False):
-        self.window.fill((0, 0, 0))
-        self.draw_grid()
+        if self.window is not None:
+            self.window.fill((0, 0, 0))
+            self.draw_grid()
         if not keep_obstacles:
             self.obstacles = {}
             self.create_boundary()
@@ -119,17 +124,20 @@ class GameEngine:
             pygame.draw.ellipse(self.window, rgb, pygame.Rect(x-a/2, y-b/2, a, b), 2)
             pygame.display.update()
             time.sleep(0.01)
+        pass
 
     def draw_rectangle(self, x, y):
         if self.window is not None:
             pygame.draw.rect(self.window, (255, 255, 0), pygame.Rect(x, y, 10, 10))
             pygame.display.update()
             time.sleep(0.01)
+        pass
 
     def draw_small_rectangle(self, x, y):
         if self.window is not None:
             pygame.draw.rect(self.window, (255, 255, 0), pygame.Rect(x, y, 5, 5))
             pygame.display.update()
+        pass
 
     def draw_ellipse_angled(self, rect, angle, color=(255, 255, 0), width=2):
         if self.window is not None:
@@ -139,3 +147,9 @@ class GameEngine:
             pygame.draw.ellipse(shape_surf, color, (0, 0, *target_rect.size), width)
             rotated_surf = pygame.transform.rotate(shape_surf, angle)
             surface.blit(rotated_surf, rotated_surf.get_rect(center=target_rect.center))
+        pass
+
+class Rect:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y

@@ -11,6 +11,8 @@ import pygame
 import time
 import pandas as pd
 from multiprocessing import Pool
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 def calculate_distance(node1, node2):
     return ((node1[0] - node2[0]) ** 2 + (node1[1] - node2[1]) ** 2) ** 0.5
@@ -98,12 +100,13 @@ class Benchmark:
         obstacle_coverages = [0, 0.1, 0.2, 0.3, 0.4, 0.5]
         algorithms = ["astar", "rrt", "rrt*", "informed rrt*", "fmt*", "bit*"]
         optim_algo = ["rrt*", "informed rrt*", "bit*"]
+        pool = Pool(processes=attemps)
+
         for size in map_sizes:
             for obstacle_coverage in obstacle_coverages:
                 self.build_environment(size, obstacle_coverage)
                 self.load_algorithms()
                 for algo in algorithms:
-                    pool = Pool(processes=attemps)
                     args = [tuple((algo, 0)) for i in range(attemps)]
                     results = pool.map(self.run_benchmarking_attemps, args)
                     for result in results:
@@ -117,6 +120,7 @@ class Benchmark:
                                 "Time": result[1],
                                 "Optimisation_time" : 0
                             }, ignore_index=True)
+                    self.save_data()
         for size in map_sizes:
             for obstacle_coverage in obstacle_coverages:
                 self.build_environment(size, obstacle_coverage)
@@ -124,7 +128,6 @@ class Benchmark:
                 for algo in optim_algo:
                     for optim in range(1, times_to_double):
                         optim_time = start_optim**optim
-                        pool = Pool(processes=attemps)
                         args = [tuple((algo, optim_time)) for i in range(attemps)]
                         results = pool.map(self.run_benchmarking_attemps, args)
                         for result in results:
@@ -138,6 +141,7 @@ class Benchmark:
                                     "Time": result[1],
                                     "Optimisation_time" : optim_time
                                 }, ignore_index=True)
+                        self.save_data()
 
 
     def run_benchmarking_attemps(self, args):
@@ -164,7 +168,6 @@ class Benchmark:
 def main():
     bench = Benchmark()
     bench.run_benchmarking(20, 0.1, 7)
-    bench.save_data()
 
 if __name__ == "__main__":
     main()
