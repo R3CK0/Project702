@@ -39,6 +39,7 @@ class BitStar(InformedRRTStar2D, FMTStar2D):
 
     # TODO: fix the bug with the block in front of the start
     def find_path(self, start_pos, end_pos, progress=False, optimise_time=None):
+        safety_time = time.time()
         unvisited_set = self.sampleFree(self.K)
         open_set = PriorityQueue()
         closed_set = set()
@@ -56,7 +57,11 @@ class BitStar(InformedRRTStar2D, FMTStar2D):
         current_node = self.start_node
         start = True
         Found_path = False
-        while current_node is not self.end_node:
+        if optimise_time is None:
+            stop_safety = 3
+        else:
+            stop_safety = optimise_time+1
+        while current_node is not self.end_node and time.time() - safety_time < stop_safety:
             self.expand_tree(current_node, open_set, unvisited_set, radius, progress)
             closed_set.add(current_node)
             if start:
@@ -72,6 +77,7 @@ class BitStar(InformedRRTStar2D, FMTStar2D):
                 if optimise_time is not None:
                     return self.optimise_path(current_node, time.time(), optimise_time, radius, progress, graph=closed_set)
                 return self.reconstruct_path(self.end_node)
+        return None
 
 
     def create_node(self, elipsoid_params=None):

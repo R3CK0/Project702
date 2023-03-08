@@ -4,15 +4,15 @@ import random
 
 import game_engine as ge
 import a_star as astar
+from a_star import AStar2D
 from rrt import RRT2D, RRTStar2D, InformedRRTStar2D
 from fmt import FMTStar2D
 from bit_star import BitStar
-import pygame
 import time
 import pandas as pd
 from multiprocessing import Pool
 import warnings
-warnings.filterwarnings("ignore", category=DeprecationWarning)
+
 
 def calculate_distance(node1, node2):
     return ((node1[0] - node2[0]) ** 2 + (node1[1] - node2[1]) ** 2) ** 0.5
@@ -49,19 +49,19 @@ class Benchmark:
             self.window_height = 1200
             self.grid_size = 20
             self.free_space = 3364
-            print("small : 3 364")
+            print("medium : 3 364")
         elif size == "large":
             self.window_width = 1200
             self.window_height = 1200
             self.grid_size = 10
             self.free_space = 13924
-            print("small : 13 924")
+            print("large : 13 924")
         elif size == "xlarge":
             self.window_width = 1200
             self.window_height = 1200
             self.grid_size = 4
             self.free_space = 88804
-            print("small : 88 804")
+            print("xlarge : 88 804")
         self.game_engine = ge.GameEngine(self.window_width, self.window_height, self.grid_size, benchmark=True)
         self.game_engine.create_boundary()
         self.environement = {"width": self.window_width, "height": self.window_height, "grid_size": self.grid_size}
@@ -81,12 +81,13 @@ class Benchmark:
         self.end_pos = (x - (x % self.grid_size), y - (y % self.grid_size))
         self.game_engine.add_end_point(x, y)
         self.start_pos = (self.start_pos[0] + self.grid_size / 2, self.start_pos[1] + self.grid_size / 2)
+        self.end_pos = (self.end_pos[0] + self.grid_size / 2, self.end_pos[1] + self.grid_size / 2)
     def generate_random_point(self):
         return (random.randint(self.grid_size, self.window_width-self.grid_size), random.randint(self.grid_size, self.window_height - self.grid_size))
 
     # TODO: load algorithms
     def load_algorithms(self):
-        self.algo["astar"] = astar.AStar2D(self.environement, self.game_engine, benchmark=True)
+        self.algo["astar"] = AStar2D(self.environement, self.game_engine, benchmark=True)
         self.algo["rrt"] = RRT2D(self.environement, self.game_engine, 1000, benchmark=True)
         self.algo["rrt*"] = RRTStar2D(self.environement, self.game_engine, 1000, benchmark=True)
         self.algo["informed rrt*"] = InformedRRTStar2D(self.environement, self.game_engine, 1000, benchmark=True)
@@ -127,9 +128,9 @@ class Benchmark:
                 self.build_environment(size, obstacle_coverage)
                 self.load_algorithms()
                 for algo in optim_algo:
-                    print("Running benchmarking for {} with {}% obstacle coverage".format(algo, obstacle_coverage * 100))
-                    for optim in range(1, times_to_double):
-                        optim_time = start_optim**optim
+                    for optim in range(times_to_double):
+                        optim_time = start_optim* 2**optim
+                        print("Running benchmarking for {} with {}% obstacle coverage and optimisation time of {}".format(algo, obstacle_coverage*100, optim_time))
                         args = [tuple((algo, optim_time)) for i in range(attemps)]
                         results = pool.map(self.run_benchmarking_attemps, args)
                         for result in results:
@@ -161,15 +162,10 @@ class Benchmark:
     def save_data(self):
         self.data.to_csv("benchmark_data.csv")
 
-
-    # TODO: run algorithms and record data for succecive runs
-    # TODO: save data
-    # TODO: prep data
-    # TODO: plot data
-
 def main():
     bench = Benchmark()
     bench.run_benchmarking(20, 0.1, 7)
 
 if __name__ == "__main__":
+    warnings.filterwarnings("ignore", category=DeprecationWarning)
     main()
