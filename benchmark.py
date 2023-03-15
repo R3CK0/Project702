@@ -104,7 +104,7 @@ class Benchmark:
             obstacle_coverages = [0, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35]
         else:
             obstacle_coverages = np.arange(obstacle_coverage[0], obstacle_coverage[1], 0.05)
-        algorithms = ["astar", "rrt", "rrt*", "informed rrt*", "fmt*", "bit*"]
+        algorithms = ["astar", "rrt", "rrt*", "informed rrt*",'fmt*', "bit*"]
         optim_algo = ["rrt*", "informed rrt*", "bit*"]
         pool = Pool(processes=attemps)
 
@@ -115,6 +115,7 @@ class Benchmark:
                 for algo in algorithms:
                     print("Running benchmarking for {} with {}% obstacle coverage".format(algo, obstacle_coverage*100))
                     args = [tuple((algo, 0)) for i in range(attemps)]
+
                     results = pool.map(self.run_benchmarking_attemps, args)
                     for result in results:
                         if result is not None:

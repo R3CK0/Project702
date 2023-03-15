@@ -85,9 +85,13 @@ class FMTStar2D:
 
     def sampleFree(self, n):
         sampleSpace = {}
+        terminate_time = 2
+        terminate = time.time()
         for i in range(n):
             node = self.create_node()
             sampleSpace[node.pos] = node
+            if time.time() - terminate > terminate_time:
+                break
         return sampleSpace
 
     def save(self, samples, node):
