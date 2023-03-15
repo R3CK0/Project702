@@ -58,7 +58,7 @@ class BitStar(InformedRRTStar2D, FMTStar2D):
         start = True
         Found_path = False
         if optimise_time is None:
-            stop_safety = 3
+            stop_safety = 5
         else:
             stop_safety = optimise_time+1
         while current_node is not self.end_node and time.time() - safety_time < stop_safety:

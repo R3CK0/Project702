@@ -12,6 +12,7 @@ import time
 import pandas as pd
 from multiprocessing import Pool
 import warnings
+import numpy as np
 
 
 def calculate_distance(node1, node2):
@@ -70,16 +71,17 @@ class Benchmark:
         (x, y) = self.generate_random_point()
         self.start_pos = (x - (x % self.grid_size), y - (y % self.grid_size))
         self.game_engine.add_start_point(x, y)
-        for i in range(obstacle_amount):
-            (x, y) = self.generate_random_point()
-            if (x - (x % self.grid_size), y - (y % self.grid_size)) != self.start_pos \
-                    and self.start_pos[0] - (self.start_pos[0] % self.grid_size) + self.grid_size < x - (x % self.grid_size) < self.start_pos[0] - (self.start_pos[0] % self.grid_size) - self.grid_size \
-                    and self.start_pos[1] - (self.start_pos[1] % self.grid_size) + self.grid_size < y - (y % self.grid_size) < self.start_pos[1] - (self.start_pos[1] % self.grid_size) - self.grid_size:
-                self.game_engine.add_obstacle(x, y)
-
         (x, y) = self.generate_random_point()
         self.end_pos = (x - (x % self.grid_size), y - (y % self.grid_size))
         self.game_engine.add_end_point(x, y)
+        for i in range(obstacle_amount):
+            (x, y) = self.generate_random_point()
+            if (x - (x % self.grid_size), y - (y % self.grid_size)) != self.start_pos \
+                    and (self.start_pos[0] + self.grid_size < x - (x % self.grid_size) or x - (x % self.grid_size) < self.start_pos[0] - self.grid_size
+                    or self.start_pos[1] + self.grid_size < y - (y % self.grid_size) or y - (y % self.grid_size) < self.start_pos[1] - self.grid_size) \
+                    and (self.end_pos[0] + self.grid_size < x - (x % self.grid_size) or x - (x % self.grid_size) < self.end_pos[0] - self.grid_size
+                    or self.end_pos[1] + self.grid_size < y - (y % self.grid_size) or y - (y % self.grid_size) < self.end_pos[1] - self.grid_size):
+                self.game_engine.add_obstacle(x, y)
         self.start_pos = (self.start_pos[0] + self.grid_size / 2, self.start_pos[1] + self.grid_size / 2)
         self.end_pos = (self.end_pos[0] + self.grid_size / 2, self.end_pos[1] + self.grid_size / 2)
     def generate_random_point(self):
@@ -96,10 +98,13 @@ class Benchmark:
         self.game_engine = None
 
 
-    def run_benchmarking(self, attemps, start_optim, times_to_double):
+    def run_benchmarking(self, attemps, start_optim, times_to_double, obstacle_coverage = None):
         map_sizes = ["small", "medium", "large", "xlarge"]
-        obstacle_coverages = [0, 0.1, 0.2, 0.3, 0.4, 0.5]
-        algorithms = ["astar", "rrt", "rrt*", "informed rrt*", "fmt*", "bit*"]
+        if obstacle_coverage is None:
+            obstacle_coverages = [0, 0.05, 0.10, 0.15, 0.20, 0.25, 0.30, 0.35]
+        else:
+            obstacle_coverages = np.arange(obstacle_coverage[0], obstacle_coverage[1], 0.05)
+        algorithms = ["astar", "rrt", "rrt*", "informed rrt*",'fmt*', "bit*"]
         optim_algo = ["rrt*", "informed rrt*", "bit*"]
         pool = Pool(processes=attemps)
 
@@ -110,9 +115,17 @@ class Benchmark:
                 for algo in algorithms:
                     print("Running benchmarking for {} with {}% obstacle coverage".format(algo, obstacle_coverage*100))
                     args = [tuple((algo, 0)) for i in range(attemps)]
+
                     results = pool.map(self.run_benchmarking_attemps, args)
                     for result in results:
                         if result is not None:
+                            if algo == "astar":
+                                while result[0] == 0:
+                                    self.build_environment(size, obstacle_coverage)
+                                    self.load_algorithms()
+                                    args = [tuple((algo, 0)) for i in range(attemps)]
+                                    results = pool.map(self.run_benchmarking_attemps, args)
+                                    result = results[0]
                             # add data to dataframe
                             self.data = self.data.append({
                                 "Algorithm": algo,
@@ -157,6 +170,9 @@ class Benchmark:
             path = self.algo[algo].find_path(self.start_pos, self.end_pos, optim_time)
         if path is not None:
             return tuple((path_length(path), time.time() - time_start))
+        elif algo == "astar" and path is None:
+            print("impassable")
+            return tuple((0, time.time() - time_start))
         else:
             return None
     def save_data(self):
@@ -164,7 +180,7 @@ class Benchmark:
 
 def main():
     bench = Benchmark()
-    bench.run_benchmarking(20, 0.1, 7)
+    bench.run_benchmarking(20, 0.1, 8)
 
 if __name__ == "__main__":
     warnings.filterwarnings("ignore", category=DeprecationWarning)

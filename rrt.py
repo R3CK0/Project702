@@ -76,7 +76,7 @@ class RRT2D(AStar2D):
 
 
 class RRTStar2D(RRT2D):
-    def __init__(self, environement, game_engine=None, K=1000, r=50, benchmark=False):
+    def __init__(self, environement, game_engine=None, K=1000, r=150, benchmark=False):
         super().__init__(environement=environement, game_engine=game_engine, K=K, benchmark=benchmark)
         self.r = r
 
@@ -215,7 +215,7 @@ class RRTStar2D(RRT2D):
 
 # Description: InformedRRT* pathfinding algorithm
 class InformedRRTStar2D(RRTStar2D):
-    def __init__(self, environement, game_engine, K=1000, r=100, goal_sample_rate=5, benchmark=False):
+    def __init__(self, environement, game_engine, K=1000, r=150, goal_sample_rate=5, benchmark=False):
         super().__init__(environement=environement, game_engine=game_engine, K=K, r=r, benchmark=benchmark)
         self.goal_sample_rate = goal_sample_rate
 

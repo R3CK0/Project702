@@ -149,7 +149,9 @@ class GameEngine:
             surface.blit(rotated_surf, rotated_surf.get_rect(center=target_rect.center))
         pass
 
+
 class Rect:
     def __init__(self, x, y):
         self.x = x
         self.y = y
+

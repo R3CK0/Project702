@@ -7,6 +7,7 @@ import math
 from queue import PriorityQueue
 import random
 import numpy as np
+import time
 
 # Description: FMT* path planning algorithm
 class FMTStar2D:
@@ -39,7 +40,9 @@ class FMTStar2D:
 
         current_node = start_node
         start = True
-        while current_node is not end_node:
+        safety_time = time.time()
+        stop_safety = 5
+        while current_node is not end_node and time.time() - safety_time < stop_safety:
             self.expand_tree(current_node, open_set, unvisited_set, radius, progress)
             closed_set.add(current_node)
             if open_set.empty():
@@ -82,9 +85,13 @@ class FMTStar2D:
 
     def sampleFree(self, n):
         sampleSpace = {}
+        terminate_time = 2
+        terminate = time.time()
         for i in range(n):
             node = self.create_node()
             sampleSpace[node.pos] = node
+            if time.time() - terminate > terminate_time:
+                break
         return sampleSpace
 
     def save(self, samples, node):
