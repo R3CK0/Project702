@@ -1,0 +1,205 @@
+<?xml version="1.0"?>
+<!-- created with Phobos 1.0.1 "Capricious Choutengan" -->
+<sdf version="1.5">
+  <model name="RobotArm">
+    <link name="joint1">
+      <pose>0 0 1.0 0 0 0</pose>
+      <inertial>
+        <mass>100.0</mass>
+        <inertia>
+          <ixx>57.85528</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>57.85528</iyy>
+          <iyz>0</iyz>
+          <izz>49.0439</izz>
+        </inertia>
+        <pose>0 0 0 0 0 0</pose>
+      </inertial>
+      <collision name="Cylinder">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>0.99039</radius>
+            <length>2.0</length>
+          </cylinder>
+        </geometry>
+      </collision>
+      <visual name="Cylinder">
+        <pose>0.0 0.0 0.0 0.0 -0.0 0.0</pose>
+        <material>
+          <ambient>0.04045 0.21343 0.21343 1.0</ambient>
+          <diffuse>0.04045 0.21343 0.64 1.0</diffuse>
+          <specular>0.5 0.5 0.5 1.0</specular>
+        </material>
+        <geometry>
+          <cylinder>
+            <radius>0.99039</radius>
+            <length>2.0</length>
+          </cylinder>
+        </geometry>
+      </visual>
+    </link>
+    <link name="new_link">
+      <pose>0 3.825 28.4 0 0 0</pose>
+      <inertial>
+        <mass>100.0</mass>
+        <inertia>
+          <ixx>57.8553</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>57.85529</iyy>
+          <iyz>-6e-05</iyz>
+          <izz>49.04386</izz>
+        </inertia>
+        <pose>0 0 0 0 0 0</pose>
+      </inertial>
+      <collision name="Cylinder.006">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <cylinder>
+            <radius>1.0</radius>
+            <length>1.98079</length>
+          </cylinder>
+        </geometry>
+      </collision>
+      <visual name="Cylinder.006">
+        <pose>-2.6645352591003757e-15 7.152557373046875e-07 3.814697265625e-06 -5.142616146258661e-07 -0.0 0.0</pose>
+        <material>
+          <ambient>0.04102 0.21308 0.21308 1.0</ambient>
+          <diffuse>0.04102 0.21308 0.63928 1.0</diffuse>
+          <specular>0.5 0.5 0.5 1.0</specular>
+        </material>
+        <geometry>
+          <cylinder>
+            <radius>0.99039</radius>
+            <length>2.0</length>
+          </cylinder>
+        </geometry>
+      </visual>
+    </link>
+    <joint type="revolute" name="joint3">
+      <parent>new_link</parent>
+      <child>new_link</child>
+      <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
+      <axis>
+        <xyz>0 0 1.0</xyz>
+        <limit>
+          <lower>-4.5</lower>
+          <upper>4.5</upper>
+          <effort>0</effort>
+          <velocity>3.0</velocity>
+        </limit>
+      </axis>
+    </joint>
+    <joint type="fixed" name="joint9">
+      <parent>new_link</parent>
+      <child>new_link</child>
+      <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
+    </joint>
+    <joint type="fixed" name="joint8">
+      <parent>new_link</parent>
+      <child>new_link</child>
+      <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
+    </joint>
+    <joint type="revolute" name="joint7">
+      <parent>new_link</parent>
+      <child>new_link</child>
+      <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
+      <axis>
+        <xyz>0 0 1.0</xyz>
+        <limit>
+          <lower>-4.5</lower>
+          <upper>4.5</upper>
+          <effort>0</effort>
+          <velocity>3.0</velocity>
+        </limit>
+      </axis>
+    </joint>
+    <joint type="revolute" name="joint10">
+      <parent>new_link</parent>
+      <child>new_link</child>
+      <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
+      <axis>
+        <xyz>0 0 1.0</xyz>
+        <limit>
+          <lower>-4.5</lower>
+          <upper>4.5</upper>
+          <effort>0</effort>
+          <velocity>3.0</velocity>
+        </limit>
+      </axis>
+    </joint>
+    <joint type="fixed" name="joint13">
+      <parent>new_link</parent>
+      <child>new_link</child>
+      <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
+    </joint>
+    <joint type="revolute" name="joint2">
+      <parent>joint1</parent>
+      <child>new_link</child>
+      <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
+      <axis>
+        <xyz>0 0 1.0</xyz>
+        <limit>
+          <lower>-4.5</lower>
+          <upper>4.5</upper>
+          <effort>0</effort>
+          <velocity>3.0</velocity>
+        </limit>
+      </axis>
+    </joint>
+    <joint type="revolute" name="joint12">
+      <parent>new_link</parent>
+      <child>new_link</child>
+      <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
+      <axis>
+        <xyz>0 0 1.0</xyz>
+        <limit>
+          <lower>-4.5</lower>
+          <upper>4.5</upper>
+          <effort>0</effort>
+          <velocity>3.0</velocity>
+        </limit>
+      </axis>
+    </joint>
+    <joint type="fixed" name="joint5">
+      <parent>new_link</parent>
+      <child>new_link</child>
+      <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
+    </joint>
+    <joint type="fixed" name="joint6">
+      <parent>new_link</parent>
+      <child>new_link</child>
+      <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
+    </joint>
+    <joint type="revolute" name="joint4">
+      <parent>new_link</parent>
+      <child>new_link</child>
+      <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
+      <axis>
+        <xyz>0 0 1.0</xyz>
+        <limit>
+          <lower>-4.5</lower>
+          <upper>4.5</upper>
+          <effort>0</effort>
+          <velocity>3.0</velocity>
+        </limit>
+      </axis>
+    </joint>
+    <joint type="revolute" name="joint11">
+      <parent>new_link</parent>
+      <child>new_link</child>
+      <pose>0.0 0.0 0.0 0.0 0.0 0.0</pose>
+      <axis>
+        <xyz>0 0 1.0</xyz>
+        <limit>
+          <lower>-4.5</lower>
+          <upper>4.5</upper>
+          <effort>0</effort>
+          <velocity>3.0</velocity>
+        </limit>
+      </axis>
+    </joint>
+  </model>
+</sdf>
