@@ -1,0 +1,814 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="Assem1.SLDASM">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="-1.6835E-07 -0.0054496 0.26289"
+        rpy="0 0 0" />
+      <mass
+        value="130.41" />
+      <inertia
+        ixx="2.8918"
+        ixy="4.1427E-06"
+        ixz="-8.7919E-07"
+        iyy="2.9518"
+        iyz="-0.0095678"
+        izz="1.3963" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Assem1.SLDASM/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.72157 0.32941 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Assem1.SLDASM/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="Link_1">
+    <inertial>
+      <origin
+        xyz="6.1565E-07 -0.0042679 0.28551"
+        rpy="0 0 0" />
+      <mass
+        value="65.228" />
+      <inertia
+        ixx="2.1977"
+        ixy="-4.6364E-06"
+        ixz="2.5795E-06"
+        iyy="2.2095"
+        iyz="-0.023803"
+        izz="0.27011" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Assem1.SLDASM/meshes/Link_1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.72157 0.32941 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Assem1.SLDASM/meshes/Link_1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Joint_1"
+    type="revolute">
+    <origin
+      xyz="0 0.65 0.24943"
+      rpy="1.5708 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="Link_1" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-4.15"
+      upper="4.15"
+      effort="20000"
+      velocity="1" />
+  </joint>
+  <link
+    name="Motor_1">
+    <inertial>
+      <origin
+        xyz="6.6613E-16 3.8858E-16 0.45"
+        rpy="0 0 0" />
+      <mass
+        value="10.226" />
+      <inertia
+        ixx="0.049713"
+        ixy="1.1422E-18"
+        ixz="-1.8523E-20"
+        iyy="0.049713"
+        iyz="-4.6428E-18"
+        izz="0.082382" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Assem1.SLDASM/meshes/Motor_1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.54902 0.18039 0.18039 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Assem1.SLDASM/meshes/Motor_1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Joint_1_Motor"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="Link_1" />
+    <child
+      link="Motor_1" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="Link_2">
+    <inertial>
+      <origin
+        xyz="0 -2.7756E-17 2.5975"
+        rpy="0 0 0" />
+      <mass
+        value="292.92" />
+      <inertia
+        ixx="629.08"
+        ixy="6.9601E-17"
+        ixz="5.7624E-16"
+        iyy="629.08"
+        iyz="2.2119E-16"
+        izz="0.97965" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Assem1.SLDASM/meshes/Link_2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.81176 0.50196 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Assem1.SLDASM/meshes/Link_2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Joint_2"
+    type="revolute">
+    <origin
+      xyz="0 0 0.2"
+      rpy="-1.5708 0 0" />
+    <parent
+      link="Link_1" />
+    <child
+      link="Link_2" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-4.15"
+      upper="4.15"
+      effort="15000"
+      velocity="2" />
+  </joint>
+  <link
+    name="Motor_2_1">
+    <inertial>
+      <origin
+        xyz="-1.1102E-16 -2.7756E-17 0.1475"
+        rpy="0 0 0" />
+      <mass
+        value="10.226" />
+      <inertia
+        ixx="0.049713"
+        ixy="1.9956E-18"
+        ixz="-8.265E-18"
+        iyy="0.049713"
+        iyz="2.9371E-19"
+        izz="0.082382" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Assem1.SLDASM/meshes/Motor_2_1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.54902 0.18039 0.18039 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Assem1.SLDASM/meshes/Motor_2_1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Joint_2_Motor_1"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="Link_2" />
+    <child
+      link="Motor_2_1" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="Morot_2_2">
+    <inertial>
+      <origin
+        xyz="1.1102E-16 -5.5511E-17 5.0475"
+        rpy="0 0 0" />
+      <mass
+        value="10.226" />
+      <inertia
+        ixx="0.049713"
+        ixy="-5.1991E-18"
+        ixz="-8.9285E-19"
+        iyy="0.049713"
+        iyz="-3.6545E-19"
+        izz="0.082382" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Assem1.SLDASM/meshes/Morot_2_2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.54902 0.18039 0.18039 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Assem1.SLDASM/meshes/Morot_2_2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Joint_2_Motor_2"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="Link_2" />
+    <child
+      link="Morot_2_2" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="Link_3">
+    <inertial>
+      <origin
+        xyz="-5.8713E-07 0.004268 0.28551"
+        rpy="0 0 0" />
+      <mass
+        value="65.228" />
+      <inertia
+        ixx="2.1977"
+        ixy="-4.4524E-06"
+        ixz="-2.5206E-06"
+        iyy="2.2095"
+        iyz="0.023804"
+        izz="0.27011" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Assem1.SLDASM/meshes/Link_3.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.72157 0.32941 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Assem1.SLDASM/meshes/Link_3.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Joint_3"
+    type="fixed">
+    <origin
+      xyz="0.0048565 -0.19994 5.195"
+      rpy="1.5708 0 -3.1173" />
+    <parent
+      link="Link_2" />
+    <child
+      link="Link_3" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="Motor_3">
+    <inertial>
+      <origin
+        xyz="5.5511E-16 1.7764E-15 0.475"
+        rpy="0 0 0" />
+      <mass
+        value="15.339" />
+      <inertia
+        ixx="0.090547"
+        ixy="-5.4534E-18"
+        ixz="2.1684E-19"
+        iyy="0.090547"
+        iyz="2.2155E-18"
+        izz="0.12357" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Assem1.SLDASM/meshes/Motor_3.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.54902 0.18039 0.18039 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Assem1.SLDASM/meshes/Motor_3.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Joint_3_Motor"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="Link_3" />
+    <child
+      link="Motor_3" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="Link_4">
+    <inertial>
+      <origin
+        xyz="9.2888E-07 -0.0066391 0.18023"
+        rpy="0 0 0" />
+      <mass
+        value="41.932" />
+      <inertia
+        ixx="0.63144"
+        ixy="-3.5616E-07"
+        ixz="-5.2368E-08"
+        iyy="0.64396"
+        iyz="0.0055051"
+        izz="0.21637" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Assem1.SLDASM/meshes/Link_4.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.72157 0.32941 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Assem1.SLDASM/meshes/Link_4.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Joint_4"
+    type="revolute">
+    <origin
+      xyz="0 0 0.95"
+      rpy="-3.1416 0 3.1416" />
+    <parent
+      link="Link_3" />
+    <child
+      link="Link_4" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-4.15"
+      upper="4.15"
+      effort="10000"
+      velocity="1" />
+  </joint>
+  <link
+    name="Link_5">
+    <inertial>
+      <origin
+        xyz="0 -1.1102E-16 2.5975"
+        rpy="0 0 0" />
+      <mass
+        value="292.92" />
+      <inertia
+        ixx="629.08"
+        ixy="-5.0437E-17"
+        ixz="-2.9033E-16"
+        iyy="629.08"
+        iyz="4.6763E-15"
+        izz="0.97965" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Assem1.SLDASM/meshes/Link_5.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.81176 0.50196 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Assem1.SLDASM/meshes/Link_5.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Joint_5"
+    type="fixed">
+    <origin
+      xyz="0 5.195 0.2"
+      rpy="-1.5708 0.024285 -3.1416" />
+    <parent
+      link="Link_4" />
+    <child
+      link="Link_5" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="Motor_5_1">
+    <inertial>
+      <origin
+        xyz="2.9976E-15 6.6613E-16 5.0475"
+        rpy="0 0 0" />
+      <mass
+        value="10.226" />
+      <inertia
+        ixx="0.049713"
+        ixy="1.6001E-20"
+        ixz="-9.0824E-18"
+        iyy="0.049713"
+        iyz="3.2401E-18"
+        izz="0.082382" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Assem1.SLDASM/meshes/Motor_5_1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.54902 0.18039 0.18039 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Assem1.SLDASM/meshes/Motor_5_1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Joint_5_Motor_1"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="Link_5" />
+    <child
+      link="Motor_5_1" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="Motor_5_2">
+    <inertial>
+      <origin
+        xyz="2.2204E-16 3.3307E-16 0.1475"
+        rpy="0 0 0" />
+      <mass
+        value="10.226" />
+      <inertia
+        ixx="0.049713"
+        ixy="-2.4157E-18"
+        ixz="-1.1873E-17"
+        iyy="0.049713"
+        iyz="-1.4566E-18"
+        izz="0.082382" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Assem1.SLDASM/meshes/Motor_5_2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.54902 0.18039 0.18039 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Assem1.SLDASM/meshes/Motor_5_2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Joint_5_Motor_2"
+    type="fixed">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="Link_5" />
+    <child
+      link="Motor_5_2" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="Link_6">
+    <inertial>
+      <origin
+        xyz="-6.1565E-07 0.085506 -0.0042679"
+        rpy="0 0 0" />
+      <mass
+        value="65.228" />
+      <inertia
+        ixx="2.1977"
+        ixy="-2.5795E-06"
+        ixz="4.6364E-06"
+        iyy="0.27011"
+        iyz="-0.023803"
+        izz="2.2095" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Assem1.SLDASM/meshes/Link_6.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.72157 0.32941 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Assem1.SLDASM/meshes/Link_6.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Joint_6"
+    type="revolute">
+    <origin
+      xyz="0 0 0"
+      rpy="0 0 0" />
+    <parent
+      link="Link_5" />
+    <child
+      link="Link_6" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-4.15"
+      upper="4.15"
+      effort="15000"
+      velocity="2" />
+  </joint>
+  <link
+    name="Motor_6">
+    <inertial>
+      <origin
+        xyz="-1.1102E-16 -7.1054E-15 0.45"
+        rpy="0 0 0" />
+      <mass
+        value="10.226" />
+      <inertia
+        ixx="0.049713"
+        ixy="-1.6411E-18"
+        ixz="4.0844E-18"
+        iyy="0.049713"
+        iyz="-1.9949E-18"
+        izz="0.082382" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Assem1.SLDASM/meshes/Motor_6.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.54902 0.18039 0.18039 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Assem1.SLDASM/meshes/Motor_6.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Joint_6_Motor"
+    type="fixed">
+    <origin
+      xyz="0 -0.2 0"
+      rpy="-1.5708 0 0" />
+    <parent
+      link="Link_6" />
+    <child
+      link="Motor_6" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="Link_7">
+    <inertial>
+      <origin
+        xyz="1.6835E-07 -0.013463 0.65545"
+        rpy="0 0 0" />
+      <mass
+        value="130.41" />
+      <inertia
+        ixx="2.8918"
+        ixy="-8.7919E-07"
+        ixz="4.1427E-06"
+        iyy="1.3963"
+        iyz="-0.0095678"
+        izz="2.9518" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Assem1.SLDASM/meshes/Link_7.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 0.72157 0.32941 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://Assem1.SLDASM/meshes/Link_7.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="Joint_7"
+    type="revolute">
+    <origin
+      xyz="0 -0.2 0"
+      rpy="-1.5708 0 0" />
+    <parent
+      link="Link_6" />
+    <child
+      link="Link_7" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-4.15"
+      upper="4.15"
+      effort="15000"
+      velocity="1" />
+  </joint>
+</robot>
