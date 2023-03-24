@@ -1,0 +1,185 @@
+<?xml version="1.0"?>
+<!-- created with Phobos 1.0.1 "Capricious Choutengan" -->
+  <robot name="RobotArm">
+
+    <link name="joint1">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="100.0"/>
+        <inertia ixx="57.85528" ixy="0" ixz="0" iyy="57.85528" iyz="0" izz="49.0439"/>
+      </inertial>
+      <visual name="Cylinder">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="0.99039" length="2.0"/>
+        </geometry>
+        <material name="Material.003"/>
+      </visual>
+      <collision name="Cylinder">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="0.99039" length="2.0"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <link name="new_link">
+      <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="100.0"/>
+        <inertia ixx="57.8553" ixy="0" ixz="0" iyy="57.85529" iyz="-6e-05" izz="49.04386"/>
+      </inertial>
+      <visual name="Cylinder.006">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="0.99039" length="2.0"/>
+        </geometry>
+        <material name="Material.014"/>
+      </visual>
+      <collision name="Cylinder.006">
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+          <cylinder radius="1.0" length="1.98079"/>
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="joint10" type="revolute">
+      <origin xyz="0 0 2.09999" rpy="0 0 0"/>
+      <parent link="new_link"/>
+      <child link="new_link"/>
+      <axis xyz="0 0 1.0"/>
+      <limit lower="-4.5" upper="4.5" effort="0" velocity="3.0"/>
+    </joint>
+
+    <joint name="joint11" type="revolute">
+      <origin xyz="0 0 2.09999" rpy="0 0 0"/>
+      <parent link="new_link"/>
+      <child link="new_link"/>
+      <axis xyz="0 0 1.0"/>
+      <limit lower="-4.5" upper="4.5" effort="0" velocity="3.0"/>
+    </joint>
+
+    <joint name="joint12" type="revolute">
+      <origin xyz="0 0 2.09999" rpy="0 0 0"/>
+      <parent link="new_link"/>
+      <child link="new_link"/>
+      <axis xyz="0 0 1.0"/>
+      <limit lower="-4.5" upper="4.5" effort="0" velocity="3.0"/>
+    </joint>
+
+    <joint name="joint13" type="fixed">
+      <origin xyz="0 0 2.09999" rpy="0 0 0"/>
+      <parent link="new_link"/>
+      <child link="new_link"/>
+    </joint>
+
+    <joint name="joint2" type="revolute">
+      <origin xyz="0 0 2.09999" rpy="0 0 0"/>
+      <parent link="joint1"/>
+      <child link="new_link"/>
+      <axis xyz="0 0 1.0"/>
+      <limit lower="-4.5" upper="4.5" effort="0" velocity="3.0"/>
+    </joint>
+
+    <joint name="joint3" type="revolute">
+      <origin xyz="0 0 2.09999" rpy="0 0 0"/>
+      <parent link="new_link"/>
+      <child link="new_link"/>
+      <axis xyz="0 0 1.0"/>
+      <limit lower="-4.5" upper="4.5" effort="0" velocity="3.0"/>
+    </joint>
+
+    <joint name="joint4" type="revolute">
+      <origin xyz="0 0 2.09999" rpy="0 0 0"/>
+      <parent link="new_link"/>
+      <child link="new_link"/>
+      <axis xyz="0 0 1.0"/>
+      <limit lower="-4.5" upper="4.5" effort="0" velocity="3.0"/>
+    </joint>
+
+    <joint name="joint5" type="fixed">
+      <origin xyz="0 0 2.09999" rpy="0 0 0"/>
+      <parent link="new_link"/>
+      <child link="new_link"/>
+    </joint>
+
+    <joint name="joint6" type="fixed">
+      <origin xyz="0 0 2.09999" rpy="0 0 0"/>
+      <parent link="new_link"/>
+      <child link="new_link"/>
+    </joint>
+
+    <joint name="joint7" type="revolute">
+      <origin xyz="0 0 2.09999" rpy="0 0 0"/>
+      <parent link="new_link"/>
+      <child link="new_link"/>
+      <axis xyz="0 0 1.0"/>
+      <limit lower="-4.5" upper="4.5" effort="0" velocity="3.0"/>
+    </joint>
+
+    <joint name="joint8" type="fixed">
+      <origin xyz="0 0 2.09999" rpy="0 0 0"/>
+      <parent link="new_link"/>
+      <child link="new_link"/>
+    </joint>
+
+    <joint name="joint9" type="fixed">
+      <origin xyz="0 0 2.09999" rpy="0 0 0"/>
+      <parent link="new_link"/>
+      <child link="new_link"/>
+    </joint>
+
+    <material name="Material.002">
+      <color rgba="0.63928 0.57844 0.02274 1.0"/>
+    </material>
+
+    <material name="Material.003">
+      <color rgba="0.04045 0.21343 0.64 1.0"/>
+    </material>
+
+    <material name="Material.004">
+      <color rgba="0.48629 0.49946 0.64 1.0"/>
+    </material>
+
+    <material name="Material.005">
+      <color rgba="0.63928 0.57844 0.02274 1.0"/>
+    </material>
+
+    <material name="Material.006">
+      <color rgba="0.04102 0.21308 0.63928 1.0"/>
+    </material>
+
+    <material name="Material.007">
+      <color rgba="0.64 0.57595 0.0223 1.0"/>
+    </material>
+
+    <material name="Material.008">
+      <color rgba="0.4884 0.49917 0.63928 1.0"/>
+    </material>
+
+    <material name="Material.009">
+      <color rgba="0.63928 0.57844 0.02274 1.0"/>
+    </material>
+
+    <material name="Material.010">
+      <color rgba="0.04102 0.21308 0.63928 1.0"/>
+    </material>
+
+    <material name="Material.011">
+      <color rgba="0.63928 0.57844 0.02274 1.0"/>
+    </material>
+
+    <material name="Material.012">
+      <color rgba="0.4884 0.49917 0.63928 1.0"/>
+    </material>
+
+    <material name="Material.013">
+      <color rgba="0.63928 0.57844 0.02274 1.0"/>
+    </material>
+
+    <material name="Material.014">
+      <color rgba="0.04102 0.21308 0.63928 1.0"/>
+    </material>
+
+  </robot>
